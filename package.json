@@ -1,0 +1,14 @@
+{
+  "name": "merkle-tree-tutorial",
+  "version": "1.0.0",
+  "description": "A short tutorial demonstrating Merkle Proofs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "merkletreejs": "^0.3.11"
+  }
+}
