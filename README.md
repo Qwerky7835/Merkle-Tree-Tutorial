@@ -4,39 +4,38 @@ Merkle Trees are the heart of efficient change management. These data structures
 
 ### Quick Links
 
-* [Introduction - What are Merkle Trees?](#Introduction-/--What-are-Merkle-Trees?)
-* [Implementation - Whitelisting Emails]()
-* [Demonstration - Your first Merkle list]()
-* Video walkthrough for visual leaners
+* [Introduction - What are Merkle Trees?](#Introduction---What-are-Merkle-Trees)
+* [Implementation - Whitelisting Emails](#Implementation---Whitelisting-Emails)
+* [Demonstration - Your first Merkle list](#Demonstration---Your-first-Merkle-list)
+* Video walkthrough for visual learners - coming soon!
 
 ### Introduction - What are Merkle Trees?
 
 ![image](https://github.com/Qwerky7835/Merkle-Tree-Tutorial/assets/78215404/5c723f05-85ed-4ed8-aeae-69884ea482c0)
 
-True to their name, Merkle Trees are a specilized type of [tree](https://www.geeksforgeeks.org/introduction-to-tree-data-structure-and-algorithm-tutorials/) data structure. The *leaf* of the tree, the deepest layer, contains a hash of the data block that it represents. This data can be anything from files to a simple integer. The parents, in turn, contain a hash of its children. This pattern repeats itself until the root of the tree. In simple terms, **a Merkle Tree is a tree of recursive cryptographic hashes.**
+Merkle Trees are a specilized type of [tree](https://www.geeksforgeeks.org/introduction-to-tree-data-structure-and-algorithm-tutorials/) data structure. The *leaf* of the tree, the deepest layer, contains a hash of the data block that it represents. This data can be anything from files to a simple integer. The parents, in turn, contain a hash of its children. This pattern repeats itself until the root of the tree. In simple terms, **a Merkle Tree is a tree of recursive cryptographic hashes.**
 
-Different flavours of Merkle Trees arise depending on the hashing algorithm used and the shape of the tree itself. However, all of them share the characteristic that any change in the leaf node, results in a clear path of hash changes from leaf to root. This is why the root of a Merkle Tree is considered to be the basis of a *Merkle Proof*. Since the root and its changes are always known, we are able to calculate the validity of data associated with the tree. For example, does the data belong to the Merkle tree, if its recorded changes are correct, and most importantly, all without the need of revealing the exact content since everthing is in the form of a hash.
+Constructing a Merkle Tree data structure begins with hashing the relevant target elements. These then become the leaf nodes. Then, leaves are grouped, usually in pairs, and their hashes are hashed together to form the parent node. This process repeats until the root node , which then contains the hashes of the entire tree. Only the root needs to be stored and passed around to verify the inclusion or change of an element in the Merkle Tree.
 
-Merkle Trees are used widely in blockchain due to the fact that all changes are reflected block by block. This means we can compress all changes from one block to the next in a single Merkle root and verify the changes. In a Web 2 parallel, this is exactly how commits in Git are tracked and compared, each commit is simply a Merkle root.
+Different flavours of Merkle Trees arise depending on the hashing algorithm used and the shape of the tree itself. However, all of them share the characteristic that any change in the leaf node, results in a clear path of hash changes from leaf to root. The root of a Merkle Tree can therefore be easily reconstructed from a *Merkle Proof* and a leaf node to check the validity of the leaf. It is possible to verify proof of inclusion of data to the Merkle tree, validity of changes, and most importantly, all without the need of revealing the exact content since information is presented in the form of a hash.
+
+Merkle Trees are used widely in blockchain due to the fact that all changes are reflected block by block. This means we can compress all changes from one block to the next in a single Merkle root and verify the changes. In a Web 2 parallel, this is exactly how commits in Git are tracked and compared - each commit is a Merkle Root of the current filesystem version.
 
 ### Implementation - Whitelisting Emails
 
-To make the above theory more concrete, imagine we have want to have a whitelist, within which we would like to store a list of email addresses. Currently, the list contains the emails of Alice and Bob amongst others. The tree may look something like this:
+To make the above theory more concrete, imagine we want to have a whitelist, within which we would like to store a list of email addresses. Currently, the list contains the emails of Alice and Bob, amongst others. The tree may look something like this:
 
 <img width="438" alt="image" src="https://github.com/Qwerky7835/Merkle-Tree-Tutorial/assets/78215404/f74631de-3e13-4289-9f6a-75b67525b9c7">
 
-In order to compute a proof for Alice, Bob or Charlie, to prove that they are, or are not, on the whitelist, we need to supply to the verifier the hash of the target email address, as well as the *sibling* hashes at each layer of the tree, when traversing up the tree towards the root. The verifier knows the Merkle root and makes an attempt to see if the leaf can logically connect to the root. This computation is a formula approximately like:
-```
-Bool whitelisted = Verify(leaf, proof, root);
-```
+In order to compute a proof for an email address, which may or may not be on the whitelist, the prover mut supply the hash of the target email address, as well as the *sibling* hashes at each layer of the tree, when traversing up the tree towards the root. The verifier will then attempt to calculate the merkle root based on the leaf node and the provided path with sibling hashes and compare to the true merkle root that it knows. At the code level, the verify function may be represented as: `Verify(leaf, proof, root);`
 
-With the proof consisting of the following hashes:
+You may visualize a merkle proof using the below image. The selected target leaf node, in red, is used to build a path of *sibling* hashes towards the root. The proof will consist of the position of the sibling, in this case left or right and its hash. Additionally, run the code exmaple below which prints out the exact proof array in code.
 
 <img width="439" alt="image" src="https://github.com/Qwerky7835/Merkle-Tree-Tutorial/assets/78215404/6666550f-2de2-452d-83d4-5973047c6a68">
 
 ### Demonstration - Your first Merkle list :rocket:
 
-This tutorial contains a Javascript code example demonstrating the use of a Merkle Tree and Proof using the [MerkleTreeJS](https://www.npmjs.com/package/merkletreejs) library in order to build a Whitelist of emails. We have two existing users, Alice and Bob, already in the whitelist and will add a third, Charlie, to the whitelist.
+This tutorial contains a Javascript code example demonstrating the use of a Merkle Tree and Proof using the [MerkleTreeJS](https://www.npmjs.com/package/merkletreejs) library, in order to build a Whitelist of emails. We have two existing users, Alice and Bob, already in the whitelist and will add a third, Charlie, to the whitelist.
 
 ##### Requirements and Installation
 Make sure you have nodejs and npm installed. If not use [nvm](https://github.com/nvm-sh/nvm) to install both.
